@@ -1,0 +1,87 @@
+Name: Rupali Ajaykumar Singh
+Company: CODTECH IT SOLUTIONS
+ID: CT08DS5413
+Domain: SQL
+Duration: Jul to August 2024
+Mentor: Muzammil Ahmed
+
+Overview of the Project
+
+Project: Student Records Management System Database
+
+Project Overview
+The Student Records Management System Database is a simple database project designed to manage student records, including personal details, courses, and grades. This project serves as a practical exercise for learning how to create and manage relational databases using SQL. It provides a foundational understanding of database design, data manipulation, and querying techniques.
+
+Features
+Student Management: Store and manage personal details of students, including their names, email addresses, dates of birth, and enrollment dates.
+Course Management: Store information about courses offered, including course names, codes, and credit hours.
+Enrollment Tracking: Record which students are enrolled in which courses and their respective grades.
+Data Retrieval: Use SQL queries to retrieve and analyze data through joins and aggregations.
+
+SQL Commands
+
+1. Creation of Tables
+CREATE TABLE Students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    date_of_birth DATE NOT NULL,
+    enrollment_date DATE NOT NULL
+);
+
+CREATE TABLE Courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(10) NOT NULL UNIQUE,
+    credits INT NOT NULL
+);
+
+CREATE TABLE Enrollments (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    grade VARCHAR(2),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+);
+
+2. Insertion of Data
+INSERT INTO Students (first_name, last_name, email, date_of_birth, enrollment_date) VALUES
+('John', 'Doe', 'john.doe@example.com', '2000-01-15', '2023-01-15'),
+('Jane', 'Smith', 'jane.smith@example.com', '1999-03-22', '2023-01-20'),
+('Emily', 'Johnson', 'emily.johnson@example.com', '2001-07-30', '2023-01-25');
+
+INSERT INTO Courses (course_name, course_code, credits) VALUES
+('Introduction to Programming', 'CS101', 3),
+('Database Management Systems', 'CS102', 4),
+('Web Development', 'CS103', 3);
+
+INSERT INTO Enrollments (student_id, course_id, grade) VALUES
+(1, 1, 'A'), 
+(1, 2, 'B'),  
+(2, 1, 'A'),  
+(3, 3, 'C');  
+
+3. Updation of Data
+UPDATE Students SET email = 'john.newemail@example.com' WHERE student_id = 1;
+
+UPDATE Enrollments SET grade = 'A+' WHERE enrollment_id = 3;  -- Jane Smith's grade in CS101
+
+5. Retrieve Data Using Joins
+SELECT s.first_name, s.last_name, c.course_name, e.grade
+FROM Students s
+JOIN Enrollments e ON s.student_id = e.student_id
+JOIN Courses c ON e.course_id = c.course_id;
+
+
+SELECT c.course_name, COUNT(e.student_id) AS number_of_students
+FROM Courses c
+LEFT JOIN Enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_name;
+
+SELECT s.first_name, s.last_name
+FROM Students s
+JOIN Enrollments e ON s.student_id = e.student_id
+WHERE e.grade = 'A';
+
